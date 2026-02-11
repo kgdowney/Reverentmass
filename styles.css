@@ -1,0 +1,7 @@
+body { font-family: Arial, sans-serif; margin: 0; background: #f6f7fb; color: #1e2130; }
+.hero { background: linear-gradient(130deg, #181f48, #2d3e91); color: #fff; padding: 2rem; }
+.search-card { background: #fff; color: #191d2d; border-radius: 12px; padding: 1rem; max-width: 520px; }
+.search-row { display: flex; gap: .5rem; }
+input, button { font: inherit; padding: .6rem; border-radius: 8px; }
+button { border: none; background: #3559e8; color: #fff; cursor: pointer; }
+main { padding: 1.5rem 2rem; }

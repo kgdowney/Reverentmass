@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ReverentMass Finder</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Catholic parish discovery</p>
+      <h1>Find a Reverent Catholic Mass Near You</h1>
+    </div>
+    <form id="searchForm" class="search-card">
+      <label for="locationInput">City or ZIP code</label>
+      <div class="search-row">
+        <input id="locationInput" type="text" placeholder="Ex: Dallas, TX or 75230" />
+        <button type="submit">Find Parishes</button>
+      </div>
+    </form>
+  </header>
+  <main>
+    <section>
+      <h2>Nearby Parish Reverence Board</h2>
+      <p id="resultsMeta"></p>
+      <div id="parishList"></div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
