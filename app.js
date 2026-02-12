@@ -263,6 +263,19 @@ async function loadBaseParishes() {
   }
 }
 
+async function searchLiveParishes(query) {
+  try {
+    const response = await fetch(`/api/search-parishes?q=${encodeURIComponent(query)}`);
+    if (!response.ok) {
+      return [];
+    }
+    const payload = await response.json();
+    return Array.isArray(payload) ? payload : [];
+  } catch {
+    return [];
+  }
+}
+
 function applySearch(parishes, query, details) {
   const normalizedQuery = query.trim().toLowerCase();
 
@@ -326,16 +339,24 @@ async function initialize() {
     });
   });
 
-  document.getElementById("searchForm").addEventListener("submit", (event) => {
+  document.getElementById("searchForm").addEventListener("submit", async (event) => {
     event.preventDefault();
     const location = document.getElementById("locationInput").value;
 
     setLoadingState(true);
-    window.setTimeout(() => {
-      workingSet = applySearch(mergeSavedNotes(baseParishes), location, getSelectedDetails());
+    const liveParishes = await searchLiveParishes(location);
+    const selectedDetails = getSelectedDetails();
+
+    if (liveParishes.length) {
+      workingSet = applySearch(mergeSavedNotes(liveParishes), location, selectedDetails);
       render(workingSet, location.trim());
-      setLoadingState(false);
-    }, 550);
+      resultsMeta.textContent += " Source: live Google Places search.";
+    } else {
+      workingSet = applySearch(mergeSavedNotes(baseParishes), location, selectedDetails);
+      render(workingSet, location.trim());
+    }
+
+    setLoadingState(false);
   });
 
   hydrateWeightOutputs();
