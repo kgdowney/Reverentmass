@@ -3,30 +3,128 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ReverentMass Finder</title>
+  <title>Rooted | Stop wandering. Start growing.</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <header class="hero">
     <div>
-      <p class="eyebrow">Catholic parish discovery</p>
-      <h1>Find a Reverent Catholic Mass Near You</h1>
+      <p class="eyebrow">Rooted</p>
+      <h1>Stop Parish Shopping. Start Putting Down Roots.</h1>
+      <p class="tagline">Stop wandering. Start growing.</p>
+      <p id="buildStamp" class="build-stamp">Build: checking version…</p>
+      <p class="hero-copy">
+        Finding a reverent liturgy should not feel like a gamble. Rooted helps you compare confession,
+        adoration, chant, silence, and community feedback so you can find a parish home with confidence.
+      </p>
     </div>
-    <form id="searchForm" class="search-card">
+    <form id="searchForm" class="search-card" aria-label="Search parishes">
       <label for="locationInput">City or ZIP code</label>
       <div class="search-row">
-        <input id="locationInput" type="text" placeholder="Ex: Dallas, TX or 75230" />
-        <button type="submit">Find Parishes</button>
+        <input id="locationInput" name="location" type="text" placeholder="Ex: Dallas, TX or 75230" required />
+        <button type="submit">Find My Home</button>
       </div>
+      <div class="detail-filters">
+        <span>Filter by detail:</span>
+        <label><input type="checkbox" name="detail" value="latin" /> Latin</label>
+        <label><input type="checkbox" name="detail" value="ad-orientem" /> Ad Orientem</label>
+        <label><input type="checkbox" name="detail" value="tongue" /> Communion on tongue</label>
+        <label><input type="checkbox" name="detail" value="altar-rail" /> Altar rail</label>
+      </div>
+      <p class="help-text">Demo data is seeded now. Plug in APIs/scrapers next for live parish coverage.</p>
     </form>
   </header>
+
   <main>
+    <section class="filters" aria-label="Filter criteria">
+      <h2>Tune your Reverence Meter</h2>
+      <div class="slider-group">
+        <label for="confessionWeight">Confession availability weight</label>
+        <input id="confessionWeight" type="range" min="1" max="5" value="3" />
+        <output id="confessionWeightValue">3</output>
+      </div>
+      <div class="slider-group">
+        <label for="adorationWeight">Adoration availability weight</label>
+        <input id="adorationWeight" type="range" min="1" max="5" value="3" />
+        <output id="adorationWeightValue">3</output>
+      </div>
+      <div class="slider-group">
+        <label for="reviewWeight">Online reverence-signal weight</label>
+        <input id="reviewWeight" type="range" min="1" max="5" value="3" />
+        <output id="reviewWeightValue">3</output>
+      </div>
+      <button id="recalculateBtn" type="button">Recalculate Reverence Meter</button>
+      <p id="loadingState" class="loading-state" hidden>🌱 Extending roots through local data…</p>
+    </section>
+
     <section>
-      <h2>Nearby Parish Reverence Board</h2>
-      <p id="resultsMeta"></p>
-      <div id="parishList"></div>
+      <h2>Sanctuaries Near You</h2>
+      <p id="resultsMeta" class="results-meta"></p>
+      <div id="parishList" class="parish-grid" aria-live="polite"></div>
+    </section>
+
+    <section class="store-copy" aria-label="App summary">
+      <h2>Why use Rooted?</h2>
+      <p>
+        Rooted takes the guesswork out of Sunday morning. We crowd-source altar rail details,
+        confession availability, chant, silence, and parish testimony to produce a practical Reverence Score.
+      </p>
+      <ul>
+        <li><strong>The Reverence Meter:</strong> Instantly compare tradition and liturgical care.</li>
+        <li><strong>Filter by detail:</strong> Looking for Latin, ad orientem, or Communion on the tongue? Find it fast.</li>
+        <li><strong>Settling down:</strong> Stop driving to five churches. Find where your family can plant roots.</li>
+      </ul>
     </section>
   </main>
+
+  <template id="parishCardTemplate">
+    <article class="parish-card">
+      <div class="card-header">
+        <div>
+          <h3 class="parish-name"></h3>
+          <p class="parish-location"></p>
+        </div>
+        <div class="meter" aria-label="Reverence meter">
+          <span class="meter-value"></span>
+          <small>/100</small>
+        </div>
+      </div>
+
+      <div class="meter-track" aria-hidden="true">
+        <span class="meter-fill"></span>
+      </div>
+
+      <ul class="facts"></ul>
+      <p class="parish-details"></p>
+
+      <div class="evidence">
+        <h4>What we found online</h4>
+        <ul class="online-signals"></ul>
+      </div>
+
+      <div class="community">
+        <h4>Community notes</h4>
+        <ul class="community-notes"></ul>
+
+        <form class="note-form">
+          <label>
+            Your reverence experience
+            <textarea name="comment" rows="3" maxlength="400" placeholder="What was your experience at Mass?"></textarea>
+          </label>
+          <label>
+            Rating (1-5)
+            <input name="rating" type="number" min="1" max="5" value="5" required />
+          </label>
+          <button type="submit">Add Note</button>
+        </form>
+      </div>
+    </article>
+  </template>
+
+  <footer>
+    <p>Built for Catholics who want a reverent parish home and a place to grow.</p>
+  </footer>
+
   <script src="app.js"></script>
 </body>
 </html>
