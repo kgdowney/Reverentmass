@@ -5,6 +5,7 @@
   "description": "ReverentMass Finder static app server",
   "scripts": {
     "start": "node server.js",
-    "check": "node --check app.js && node --check server.js"
+    "check": "node --check app.js && node --check server.js && node --check scripts/sync_parishes.js",
+    "sync:data": "node scripts/sync_parishes.js"
   }
 }
