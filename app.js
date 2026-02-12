@@ -245,6 +245,24 @@ function mergeSavedNotes(parishes) {
   }));
 }
 
+async function loadBaseParishes() {
+  try {
+    const response = await fetch('/api/parishes');
+    if (!response.ok) {
+      return seedParishes;
+    }
+
+    const payload = await response.json();
+    if (!Array.isArray(payload) || !payload.length) {
+      return seedParishes;
+    }
+
+    return payload;
+  } catch {
+    return seedParishes;
+  }
+}
+
 function applySearch(parishes, query, details) {
   const normalizedQuery = query.trim().toLowerCase();
 
@@ -280,11 +298,15 @@ function hydrateBuildStamp() {
     });
 }
 
-function initialize() {
+async function initialize() {
   hydrateBuildStamp();
 
-  let workingSet = mergeSavedNotes(seedParishes);
+  const baseParishes = await loadBaseParishes();
+  let workingSet = mergeSavedNotes(baseParishes);
   render(workingSet);
+  if (baseParishes !== seedParishes) {
+    resultsMeta.textContent += " Source: synced parish dataset.";
+  }
 
   Object.values(controls).forEach((input) => {
     input.addEventListener("input", () => {
@@ -299,7 +321,7 @@ function initialize() {
   document.querySelectorAll('input[name="detail"]').forEach((checkbox) => {
     checkbox.addEventListener("change", () => {
       const query = document.getElementById("locationInput").value;
-      workingSet = applySearch(mergeSavedNotes(seedParishes), query, getSelectedDetails());
+      workingSet = applySearch(mergeSavedNotes(baseParishes), query, getSelectedDetails());
       render(workingSet, query.trim());
     });
   });
@@ -310,7 +332,7 @@ function initialize() {
 
     setLoadingState(true);
     window.setTimeout(() => {
-      workingSet = applySearch(mergeSavedNotes(seedParishes), location, getSelectedDetails());
+      workingSet = applySearch(mergeSavedNotes(baseParishes), location, getSelectedDetails());
       render(workingSet, location.trim());
       setLoadingState(false);
     }, 550);
