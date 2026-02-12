@@ -6,7 +6,8 @@ const PORT = Number(process.env.PORT || 3000);
 const HOST = process.env.HOST || '0.0.0.0';
 const ROOT = __dirname;
 const APP_NAME = 'Rooted';
-const APP_VERSION = '1.1.0';
+const APP_VERSION = '1.2.0';
+const PARISH_DATA_PATH = path.join(ROOT, 'data', 'parishes.json');
 
 const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -45,6 +46,19 @@ const server = http.createServer((req, res) => {
   if (requestPath === '/__version') {
     res.writeHead(200, buildHeaders('application/json; charset=utf-8'));
     res.end(JSON.stringify({ app: APP_NAME, version: APP_VERSION }));
+    return;
+  }
+
+  if (requestPath === '/api/parishes') {
+    fs.readFile(PARISH_DATA_PATH, 'utf8', (error, data) => {
+      if (error) {
+        res.writeHead(200, buildHeaders('application/json; charset=utf-8'));
+        res.end('[]');
+        return;
+      }
+      res.writeHead(200, buildHeaders('application/json; charset=utf-8'));
+      res.end(data);
+    });
     return;
   }
 
