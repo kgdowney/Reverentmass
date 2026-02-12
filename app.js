@@ -153,6 +153,13 @@ function setLoadingState(visible) {
   loadingState.hidden = !visible;
 }
 
+function formatDetailLabel(detail) {
+  return detail
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
 function render(parishes, activeQuery = "") {
   parishList.innerHTML = "";
   const weights = getWeights();
@@ -177,13 +184,19 @@ function render(parishes, activeQuery = "") {
     node.querySelector(".parish-location").textContent = `${parish.location} ${parish.zip}`;
     node.querySelector(".meter-value").textContent = score;
     node.querySelector(".meter-fill").style.width = `${score}%`;
-    node.querySelector(".parish-details").textContent = `Details: ${parish.details.join(", ")}`;
+    const detailChips = node.querySelector(".detail-chips");
+    parish.details.forEach((detail) => {
+      const chip = document.createElement("span");
+      chip.className = "detail-chip";
+      chip.textContent = formatDetailLabel(detail);
+      detailChips.appendChild(chip);
+    });
 
     const facts = node.querySelector(".facts");
     [
-      `Confession offered ${parish.confessionHoursPerWeek} hrs/week`,
-      `Adoration offered ${parish.adorationHoursPerWeek} hrs/week`,
-      `Average online review score ${parish.onlineReviewScore}/5`
+      `Confession: ${parish.confessionHoursPerWeek} hrs/week`,
+      `Adoration: ${parish.adorationHoursPerWeek} hrs/week`,
+      `Reviews: ${parish.onlineReviewScore}/5`
     ].forEach((fact) => {
       const li = document.createElement("li");
       li.textContent = fact;
