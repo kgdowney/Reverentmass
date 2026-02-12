@@ -12,20 +12,27 @@ const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
-  '.json': 'application/json; charset=utf-8'
+  '.json': 'application/json; charset=utf-8',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.svg': 'image/svg+xml',
+  '.ico': 'image/x-icon'
 };
 
 function safeResolve(urlPath) {
-  const decoded = decodeURIComponent((urlPath || '/').split('?')[0]);
+  const decoded = decodeURIComponent(urlPath.split('?')[0]);
   const cleanPath = decoded === '/' ? '/index.html' : decoded;
   const resolved = path.resolve(ROOT, `.${cleanPath}`);
-  if (!resolved.startsWith(ROOT)) return null;
+  if (!resolved.startsWith(ROOT)) {
+    return null;
+  }
   return resolved;
 }
 
-function headers(type) {
+function buildHeaders(contentType) {
   return {
-    'Content-Type': type,
+    'Content-Type': contentType,
     'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
     Pragma: 'no-cache',
     Expires: '0'
@@ -36,14 +43,15 @@ const server = http.createServer((req, res) => {
   const requestPath = (req.url || '/').split('?')[0];
 
   if (requestPath === '/__version') {
-    res.writeHead(200, headers('application/json; charset=utf-8'));
+    res.writeHead(200, buildHeaders('application/json; charset=utf-8'));
     res.end(JSON.stringify({ app: APP_NAME, version: APP_VERSION }));
     return;
   }
 
   const filePath = safeResolve(req.url || '/');
+
   if (!filePath) {
-    res.writeHead(400, headers('text/plain; charset=utf-8'));
+    res.writeHead(400, buildHeaders('text/plain; charset=utf-8'));
     res.end('Bad request');
     return;
   }
@@ -51,19 +59,19 @@ const server = http.createServer((req, res) => {
   fs.readFile(filePath, (error, data) => {
     if (!error) {
       const ext = path.extname(filePath).toLowerCase();
-      const type = MIME_TYPES[ext] || 'application/octet-stream';
-      res.writeHead(200, headers(type));
+      const contentType = MIME_TYPES[ext] || 'application/octet-stream';
+      res.writeHead(200, buildHeaders(contentType));
       res.end(data);
       return;
     }
 
     fs.readFile(path.join(ROOT, 'index.html'), (indexError, indexData) => {
       if (indexError) {
-        res.writeHead(404, headers('text/plain; charset=utf-8'));
+        res.writeHead(404, buildHeaders('text/plain; charset=utf-8'));
         res.end('Not found');
         return;
       }
-      res.writeHead(200, headers('text/html; charset=utf-8'));
+      res.writeHead(200, buildHeaders('text/html; charset=utf-8'));
       res.end(indexData);
     });
   });
