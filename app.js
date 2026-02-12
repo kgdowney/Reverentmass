@@ -290,6 +290,10 @@ function applySearch(parishes, query, details) {
   });
 }
 
+function filterByDetails(parishes, details) {
+  return parishes.filter((parish) => details.every((detail) => parish.details.includes(detail)));
+}
+
 
 function hydrateBuildStamp() {
   const target = document.getElementById("buildStamp");
@@ -348,7 +352,7 @@ async function initialize() {
     const selectedDetails = getSelectedDetails();
 
     if (liveParishes.length) {
-      workingSet = applySearch(mergeSavedNotes(liveParishes), location, selectedDetails);
+      workingSet = filterByDetails(mergeSavedNotes(liveParishes), selectedDetails);
       render(workingSet, location.trim());
       resultsMeta.textContent += " Source: live Google Places search.";
     } else {
