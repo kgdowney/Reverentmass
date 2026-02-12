@@ -1,7 +1,258 @@
-body { font-family: Arial, sans-serif; margin: 0; background: #f6f7fb; color: #1e2130; }
-.hero { background: linear-gradient(130deg, #181f48, #2d3e91); color: #fff; padding: 2rem; }
-.search-card { background: #fff; color: #191d2d; border-radius: 12px; padding: 1rem; max-width: 520px; }
-.search-row { display: flex; gap: .5rem; }
-input, button { font: inherit; padding: .6rem; border-radius: 8px; }
-button { border: none; background: #3559e8; color: #fff; cursor: pointer; }
-main { padding: 1.5rem 2rem; }
+:root {
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #2a2c1f;
+  background: #f4f3ee;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.hero {
+  background: linear-gradient(140deg, #1f3f2d, #375b3f 60%, #665f2d);
+  color: #f8f7ef;
+  padding: 2rem clamp(1rem, 3vw, 3rem);
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+.tagline {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-top: -0.25rem;
+  color: #f4eebf;
+}
+
+.hero-copy {
+  max-width: 62ch;
+}
+
+.build-stamp {
+  margin: 0.35rem 0 0;
+  font-size: 0.82rem;
+  color: #dfe8c3;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.search-card {
+  background: #fffcf3;
+  color: #2b2e23;
+  border-radius: 14px;
+  padding: 1rem;
+  box-shadow: 0 8px 22px rgba(14, 17, 10, 0.2);
+}
+
+.search-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.detail-filters {
+  margin-top: 0.9rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.85rem;
+  font-size: 0.88rem;
+}
+
+.detail-filters span {
+  width: 100%;
+  font-weight: 600;
+  color: #3f412f;
+}
+
+.detail-filters label {
+  display: inline-flex;
+  gap: 0.35rem;
+  align-items: center;
+}
+
+input,
+textarea,
+button {
+  font: inherit;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 0.6rem;
+  border-radius: 8px;
+  border: 1px solid #c6c8b8;
+  background: #fff;
+}
+
+button {
+  border: none;
+  border-radius: 8px;
+  background: #6b5f17;
+  color: #fff;
+  padding: 0.65rem 0.95rem;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #544a0f;
+}
+
+main {
+  padding: 1.5rem clamp(1rem, 3vw, 3rem) 2.5rem;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.filters,
+.store-copy {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1rem;
+  display: grid;
+  gap: 1rem;
+  border: 1px solid #e0e4d2;
+}
+
+.slider-group {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.35rem 0.8rem;
+  align-items: center;
+}
+
+.slider-group input {
+  grid-column: 1 / span 2;
+}
+
+.loading-state {
+  margin: 0;
+  font-size: 0.93rem;
+  color: #46582b;
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.results-meta {
+  margin-top: 0;
+  color: #4a4e39;
+}
+
+.parish-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.parish-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1rem;
+  display: grid;
+  gap: 0.8rem;
+  border: 1px solid #d9dec5;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.parish-name {
+  margin: 0;
+}
+
+.parish-location {
+  margin: 0;
+  color: #676d4f;
+  font-size: 0.95rem;
+}
+
+.meter {
+  text-align: right;
+  min-width: 4.5rem;
+  color: #355327;
+}
+
+.meter-value {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.meter-track {
+  position: relative;
+  height: 11px;
+  border-radius: 999px;
+  background: #e6ead6;
+  overflow: hidden;
+}
+
+.meter-fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #6e8a38, #3f6c2f 55%, #b69a2f);
+  transition: width 320ms ease;
+}
+
+.parish-details {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #62694e;
+}
+
+.facts,
+.online-signals,
+.community-notes {
+  margin: 0;
+  padding-left: 1.15rem;
+  color: #353a28;
+}
+
+.community {
+  border-top: 1px dashed #cfd6b7;
+  padding-top: 0.8rem;
+}
+
+.note-form {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.note-form label {
+  font-size: 0.93rem;
+  color: #2f3524;
+}
+
+.help-text,
+footer {
+  color: #62694c;
+  font-size: 0.9rem;
+}
+
+footer {
+  text-align: center;
+  padding: 1.2rem;
+}
